@@ -65,6 +65,19 @@ __powerline() {
             readonly PS_SYMBOL=$PS_SYMBOL_OTHER
     esac
 
+    __virtualenv() {
+        if [[ $VIRTUAL_ENV != "" ]]
+        then
+            # Strip out the path and just leave the env name
+            venv=" (${VIRTUAL_ENV##*/}) "
+        else
+            # In case you don't have one activated
+            venv=''
+            return
+        fi
+        printf "$venv"
+    }
+
     __git_info() { 
         [ -x "$(which git)" ] || return    # git not found
 
@@ -99,6 +112,7 @@ __powerline() {
         fi
 
         PS1="$BG_BASE1$FG_BASE3 \w $RESET"
+        PS1+="$BG_MAGENTA$FG_BASE3$(__virtualenv)$RESET"
         PS1+="$BG_BLUE$FG_BASE3$(__git_info)$RESET"
         PS1+="$BG_EXIT$FG_BASE3 $PS_SYMBOL $RESET "
     }
